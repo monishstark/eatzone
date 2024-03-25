@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2980b9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: max-height 0.3s ease; /* Add transition for smooth expansion */
+            overflow: hidden; /* Hide overflow initially */
+            max-height: 1000px; /* Set a reasonable max-height */
+        }
+
+        h1 {
+            color: #2980b9;
+        }
+
+        .payment-options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .payment-option {
+            flex-grow: 1;
+            padding: 10px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-option:hover {
+            background-color: #2574a9;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            display: none; /* Hide form groups by default */
+        }
+
+        .form-group.show {
+            display: block; /* Show form group when selected */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2574a9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="payment-container">
+        <h1>Payment Page</h1>
+        <div class="payment-options">
+            <div class="payment-option" onclick="togglePaymentMethod('card')" style="margin-right: 10px;">Card</div>
+            <div class="payment-option" onclick="togglePaymentMethod('upi')" style="margin-right: 10px;">UPI</div>
+        </div>
+        <form>
+            <div class="form-group" id="card-details">
+                <label for="card-number">Card Number</label>
+                <input type="text" id="card-number" name="card-number" placeholder="Enter card number">
+                <label for="expiry-date">Expiry Date</label>
+                <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" placeholder="Enter CVV">
+                <label for="name">Cardholder Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter cardholder name">
+                <button type="submit" id="rzp-button1" style="margin-top: 10px;">Pay Now</button>
+            </div>
+            <div class="form-group" id="upi-options">
+                <label for="upi-id">UPI ID</label>
+                <input type="text" id="upi-id" name="upi-id" placeholder="Enter UPI ID">
+                <button type="submit" id="rzp-button1" style="margin-top: 10px;">Pay Now</button>
+            </div>
+            
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = urlParams.get('orderid');
+            const total = urlParams.get('total');
+            localStorage.setItem('orderid',data);
+            localStorage.setItem('total',total);
+
+        });
+
+        function togglePaymentMethod(method) {
+            const cardDetails = document.getElementById('card-details');
+            const upiOptions = document.getElementById('upi-options');
+            const payNowButton = document.getElementById('pay-now');
+
+            if (method === 'card') {
+                cardDetails.classList.add('show');
+                upiOptions.classList.remove('show');
+                payNowButton.style.display = 'block';
+            } else if (method === 'upi') {
+                cardDetails.classList.remove('show');
+                upiOptions.classList.add('show');
+                payNowButton.style.display = 'block';
+            }
+        }
+    </script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+
+document.getElementById('rzp-button1').onclick = function(e){
+    var options = {
+    "key": "rzp_test_F1rZEmlLIN2TiL", 
+    "amount": localStorage.getItem("total"), 
+    "currency": "INR",
+    "name": "EatZone", 
+    "description": "Dishes Ordered",
+    "image": "food-delivery.png",
+    "order_id": localStorage.getItem("orderid"), 
+    "callback_url": "http://localhost:8080/eatzone/loading.html",
+    "prefill": { 
+        "name": "Gaurav Kumar", 
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000" 
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+</body>
+</html>

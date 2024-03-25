@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="header.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .slider {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .slider img {
+            width: 120px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .slider img:hover {
+            transform: scale(1.1);
+        }
+
+        .name {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .card {
+                width: 200px;
+                background-color: #f5f5f5;
+                border-radius: 10px;
+                padding: 20px;
+                text-align:left;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .card:hover {
+                transform: scale(1.05);
+            }
+
+            .card img {
+                width: 100%;
+                height: 189px;
+                border-radius: 10px;
+                margin-bottom: 10px;
+            }
+
+            .card h2 {
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
+
+            .card p {
+                font-size: 14px;
+                color: #888;
+                margin-bottom: 5px;
+            }
+            
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="leftpart">
+        <div><img src="food-delivery.gif" class="logoimg"></div>
+    </div>
+    <div class="rightpart">
+        <form action="" class="searchBar" id="cityForm" >
+            <input type="text" id ="sInput"placeholder="Search for products" autocomplete="off">
+            <button id ="btn"type="submit" ><img src="search-interface-symbol.png" class="btnimg"></button>
+        </form>
+        <div class="pcont" id="pct" onclick="dropp()">
+            <img src="user.png" class="pimg">
+            <div style="margin-top: 8px;">Profile</div>
+        </div>
+        <div class="ccont" onclick="callcart()">
+            <div class="cart-icon">
+                <img src="shopping-bag (2).png" class="cartimg">
+                <span class="cart-count" id="ccount">0</span>
+            </div>
+            <div>Cart</div>
+        </div>
+    </div>
+
+</div>
+<div id="suggest" class="autocomplete-suggestions"></div>
+<div id="pdrop"  class="profiledrop" ></div>
+    <div class="slider">
+        <div onclick="productpage('biriyani')">
+            <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/Biryani_2.png" alt="Image 1">
+            
+        </div>
+        <div onclick="productpage('parotta')">
+            <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029853/PC_Creative%20refresh/3D_bau/banners_new/Parotta.png" alt="Image 2">
+        </div>
+
+        <div onclick="productpage('dosa')">
+            <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029850/PC_Creative%20refresh/3D_bau/banners_new/Dosa.png" alt="">
+        </div>
+
+        <div onclick="productpage('chinese')">
+            <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029848/PC_Creative%20refresh/3D_bau/banners_new/Chinese.png" alt="">
+        </div>
+
+        <div onclick="productpage('idli')">
+            <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029846/PC_Creative%20refresh/3D_bau/banners_new/Idli.png" alt="">
+        </div>
+
+        <div onclick="productpage('rolls')">
+            <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029858/PC_Creative%20refresh/3D_bau/banners_new/Rolls.png" alt="">
+        </div>
+        
+    </div>
+
+    <div>
+        <h3>Top restaurant chains in Chennai</h3>
+        <style>
+            
+        </style>
+
+        <div class="container">
+            <div class="card" >
+                <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/e33e1d3ba7d6b2bb0d45e1001b731fcf" alt="Image 1">
+                <h2>Burger King</h2>
+                <p>Burgers, American</p>
+                <p>Kavanur 6.3 km</p>
+            </div>
+            <div class="card">
+                <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/2b4f62d606d1b2bfba9ba9e5386fabb7" alt="Image 2">
+                <h2>Pizza Hut</h2>
+                <p>Pizzas</p>
+                <p>Potheri 3.0 km</p>
+            </div>
+            <div class="card">
+                <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/bb7ae131544c7d37e10fc5faf76f09d6" alt="Image 3">
+                <h2>McDonald's</h2>
+                <p>Burgers, Beverages</p>
+                <p>Maraimalai Nagar 3.0 km</p>
+            </div>
+            <div class="card">
+                <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/f01666ac73626461d7455d9c24005cd4" alt="Image 3">
+                <h2>KFC</h2>
+                <p>Burgers, Biryani</p>
+                <p>Urapakkam 5.9 km</p>
+            </div>
+            <div class="card">
+                <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/1ace5fa65eff3e1223feb696c956b38b" alt="Image 3">
+                <h2>Subway</h2>
+                <p>Salads, Snacks</p>
+                <p>SRM Arch gate 2.2 km</p>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        const searchBar = document.getElementById("sInput");
+        searchBar.addEventListener("input", function () {
+            fetchsuggestions(searchBar.value);
+        });
+        
+
+        fetchCount();
+
+        async function fetchCount(){
+            try{
+                const response = await fetch(`http://localhost:8080/eatzone/CartCount`);
+                const data = await response.json();
+                var count = document.getElementById("ccount");
+                count.innerHTML = data[0].cartsize;
+
+
+            }
+            catch(error){
+                console.error('Error:', error);
+                throw error;
+            }
+        }
+
+        async function fetchsuggestions(s){
+                try {
+                    if (s == "") {
+                        document.getElementById("suggest").innerHTML = "";
+                        return;
+                    }
+                    const response = await fetch(`http://localhost:8080/eatzone/Autofill?word=${s}`);
+                    const data = await response.json();
+                    console.log(data);
+                    var suggest = document.getElementById("suggest");
+                    var t="";
+                    for(var i=0;i<data.length;i++){
+                        t+=`<div class="sug" onclick="productpage('${data[i]}')">${data[i]}</div>`;
+                    }
+                    suggest.innerHTML=t;
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    throw error;
+                }
+            }
+        function productpage(name){
+            window.location.href = "showres.html?search="+name;
+        }
+
+        async function dropp(){
+            console.log("hi");
+                try{
+                    const response = await fetch('http://localhost:8080/eatzone/SignUp');
+                    const data = await response.json();
+                var pdrop = document.getElementById("pdrop");
+                pdrop.innerHTML=`<div class="poptions1" id="pname">Hi, ${data[0]["name"]}</div>
+                <div class="poptions1" onclick="showorder()">Orders</div>
+                <div class="poptions1" onclick="logout()">Log Out</div>`;
+                }
+                catch(error){
+                    console.error('Error:', error);
+                }
+
+                
+            }
+            function callcart(){
+                window.location.href = "order.html";
+            }
+
+            function showorder(){
+                window.location.href = "orders.html";
+            }
+        
+    </script>
+
+</body>
+</html>

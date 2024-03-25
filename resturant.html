@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="header.css">
+        <meta charset="UTF-8">
+
+    </head>
+    
+    <body>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            .page{
+                margin-left: 100px;
+                margin-right: 100px;
+                margin-top: 50px;
+                margin-bottom: 50px;
+                
+                height: 100vh;
+            }
+            .row1{
+                display: grid;
+                grid-template-columns: 60% 40%;
+                margin-bottom: 20px;
+                margin-left: 200px;
+                margin-right: 200px;
+
+            }
+            
+            .rr1{
+                display: flex;
+                justify-content: flex-end;
+                
+            
+            }
+            
+
+            .cards{
+                display: grid;
+                grid-template-columns: 60% 20%;
+                grid-column-gap: 20%;
+                margin-bottom: 20px;
+
+                
+                margin-left: 200px;
+                margin-right: 200px;
+                border-bottom: black solid 1px;
+        
+            }
+            
+
+            
+
+            .cimg {
+            width: 120px;
+            height:fit-content;
+            margin-left: 20px;
+            margin-right: 20px;
+            border-radius: 5px;
+        }
+
+        .title {
+            font-size: 1.2rem;
+            color: #fff;
+            margin: 0;
+        }
+
+        .price {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .cp {
+            font-size: 15px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .p {
+            font-size: 15px;
+            margin-right: 10px;
+            text-decoration: line-through;
+        }
+
+        .d {
+            font-size: 15px;
+            margin-right: 10px;
+            color: red;
+        }
+        .cdes {
+            margin-bottom: 20px;
+            
+        }
+        .pbutton{
+            background-color: #fff;
+            color: #000;
+            border-radius: 5px;
+            padding: 5px;
+            margin-left: 20px;
+            width: 120px;
+            text-align: center;
+            cursor: pointer;
+            border: #60b246 solid 1px;
+            margin-bottom: 10px;
+            font-family: ProximaNova,arial,Helvetica Neue,sans-serif;
+        }
+        .pbutton:hover{
+            background-color: #60b246;
+            color: #fff;
+            box-shadow: 0 2px 8px #8ac07a;
+        }
+        </style>
+            <div class="header">
+                <div class="leftpart">
+                <div><img src="food-delivery.gif" class="logoimg"></div>
+            </div>
+            <div class="rightpart">
+                <form action="" class="searchBar" id="cityForm" >
+                    <input type="text" id ="sInput"placeholder="Search for products" autocomplete="off">
+                    <button id ="btn"type="submit" ><img src="search-interface-symbol.png" class="btnimg"></button>
+                </form>
+                <div class="pcont" id="pct" >
+                    <img src="user.png" class="pimg">
+                    <div style="margin-top: 8px;">Profile</div>
+                </div>
+                <div class="ccont" onclick="callcart()">
+                    <div class="cart-icon">
+                        <img src="shopping-bag (2).png" class="cartimg">
+                        <span class="cart-count" id="ccount">0</span>
+                    </div>
+                    <div>Cart</div>
+                </div>
+            </div>
+        
+        </div>
+    <div id="suggest" class="autocomplete-suggestions"></div>
+    <div id="pdrop"  class="profiledrop" ></div>
+        <div class="page">
+            <div class="row1">
+                <div class="dr1">
+                    <div id="rtitle"> title</div>
+                    <div id="raddress"> add</div>
+                </div>
+
+                <div class="rr1">
+                    <div id="rreview"> review</div>
+                </div>
+            </div>
+            <div class="row2" style="margin-left: 200px;margin-right: 200px;">
+                <div id="rmenu"> Menu</div>
+            </div>
+            <div style="margin-top: 10px; margin-bottom: 10px; margin-left: 200px; margin-right: 200px;">
+                <span>Sort:
+                    <select id="sortDropdown" onchange="sortProducts()">
+                        <option value="pricelh">Price low to high</option>
+                        <option value="pricehl">Price high to low</option>
+                        <option value="alphabetical">Alphabetical</option>
+                    </select>
+                </span>
+                <span>Filter by Price:
+                    <select id="priceRangeDropdown" onchange="filterByPrice()">
+                        <option value="all">All</option>
+                        <option value="0-1000">0 - 1000</option>
+                        <option value="1001-2000">1001 - 2000</option>
+                        <option value="2001-3000">2001 - 3000</option>
+                    </select>
+                </span>
+            </div>
+            <div class="row3" id="pd">
+                
+
+            </div>
+        </div>
+
+        <script>
+            fetchCount();
+
+async function fetchCount(){
+    try{
+        const response = await fetch(`http://localhost:8080/eatzone/CartCount`);
+        const data = await response.json();
+        var count = document.getElementById("ccount");
+        count.innerHTML = data[0].cartsize;
+
+
+    }
+    catch(error){
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+            document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = urlParams.get('id');
+            const name=urlParams.get('name');
+            const address=urlParams.get('address');
+            const rating=urlParams.get('rating');
+            localStorage.setItem("id", data);
+            console.log('Data received:', data, name, address, rating);
+            fetchdetail(name, address, rating);
+            fetchmenu(data, 0, 0, 100000000);
+        });
+
+        function fetchdetail(name, address, rating){
+            var rtitle=document.getElementById("rtitle");
+            var raddress=document.getElementById("raddress");
+            var rreview=document.getElementById("rreview");
+            rtitle.innerHTML=name;
+            raddress.innerHTML=address;
+            rreview.innerHTML=rating;
+        }
+
+        async function fetchmenu(data, s, l, u){
+            try{
+                const response = await fetch(`http://localhost:8080/eatzone/RestDetail?id=${localStorage.getItem("id")}`);
+                const data = await response.json();
+                console.log(data);
+                arr=data;
+                if (s == 0) {
+                    arr.sort(function (a, b) {
+                        return price(a.price, a.discount) - price(b.price, b.discount);
+                    });
+                } else if (s == 1) {
+                    arr.sort(function (a, b) {
+                        return price(b.price, b.discount) - price(a.price, a.discount);
+                    });
+                } else if (s == 2) {
+                    arr.sort(function (a, b) {
+                        return a.pname.localeCompare(b.pname);
+                    });
+                }
+                var pd = document.getElementById("pd");
+                pd.innerHTML = ""; 
+                var t = "";
+                for (var i = 0; i < arr.length; i++) {
+                    var tp = price(arr[i].price, arr[i].discount);
+                    if (tp >= l && tp <= u) {
+                        t += `
+                                
+                                <div class="cards">
+                                    <div class="r3d">
+                                        <div class="ctitle">${arr[i].name}</div>
+                                        <div class="price">
+                                            <div class="cp">₹${price(arr[i].price, arr[i].discount)}</div>
+                                            <div class="p">₹${arr[i].price}</div>
+                                            <div class="d">${arr[i].discount}% OFF</div>
+                                        </div>
+                                        <div class="cdes">${arr[i].description}</div>
+                                        
+
+                                    </div>
+                                    <div class="r3i">
+                                        <img src="${arr[i].img}" class="cimg">
+                                            <div class="pbutton" onclick="addtocart(${arr[i].id})">ADD</div>
+
+                                    </div>
+                                </div>`;
+                    }
+                }
+
+                pd.innerHTML += t;
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        }
+        const searchBar = document.getElementById("sInput");
+        searchBar.addEventListener("input", function () {
+            fetchsuggestions(searchBar.value);
+        });
+
+        async function fetchsuggestions(s){
+                try {
+                    if (s == "") {
+                        document.getElementById("suggest").innerHTML = "";
+                        return;
+                    }
+                    const response = await fetch(`http://localhost:8080/eatzone/Autofill?word=${s}`);
+                    const data = await response.json();
+                    console.log(data);
+                    var suggest = document.getElementById("suggest");
+                    var t="";
+                    for(var i=0;i<data.length;i++){
+                        t+=`<div class="sug" onclick="search('${data[i]}')">${data[i]}</div>`;
+                    }
+                    suggest.innerHTML=t;
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    throw error;
+                }
+            }
+        function price(p, d) {
+            return Math.round(p - (p * d / 100));
+        }
+
+        async function addtocart(id){
+            
+            var data={
+                "id": id,
+                "quantity": 1
+            }
+            try{
+                var res = await fetch('http://localhost:8080/eatzone/AddCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log(res.status);
+            }catch(err){
+                console.log(err);
+            }
+            fetchCount();
+
+        }
+
+        function callcart(){
+            window.location.href="order.html";
+        }
+
+        </script>
+    </body>
+</html>

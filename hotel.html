@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Product Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        #product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-around;
+        }
+
+        .product-row {
+            display: flex;
+            gap: 20px;
+            justify-content: space-around;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            width: 300px;
+            background-color: #fff;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        .product-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .product-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        #add-product-form {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #add-product-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        #add-product-form input,
+        #add-product-form textarea {
+            width: calc(100% - 10px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+
+        #add-product-form input:focus,
+        #add-product-form textarea:focus {
+            border-color: #3498db;
+        }
+
+        #add-product-form button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #add-product-form button:hover {
+            background-color: #2575ad;
+        }
+
+        #edit-product-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #edit-product-modal h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #edit-product-modal label {
+            color: #333;
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        #edit-product-modal input,
+        #edit-product-modal textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+
+        #edit-product-modal input:focus,
+        #edit-product-modal textarea:focus {
+            border-color: #3498db;
+        }
+
+        #edit-product-modal button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #edit-product-modal button:hover {
+            background-color: #2575ad;
+        }
+
+        #cancel-edit-button {
+            background-color: #ddd;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        #cancel-edit-button:hover {
+            background-color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Modern Product Page</h1>
+
+    <!-- Show Products -->
+    <h2>Products</h2>
+    <div id="product-list">
+        <!-- Product cards will be dynamically added here -->
+    </div>
+
+    <div id="edit-product-modal">
+        <h2>Edit Product</h2>
+       
+
+        <label for="edit-product-price">Price:</label>
+        <input type="number" id="edit-product-price" required>
+
+        <label for="edit-product-discount">Discount:</label>
+        <input type="number" id="edit-product-discount" required>
+
+
+        <button id="save-edit-button">Save Changes</button>
+        <button id="cancel-edit-button">Cancel</button>
+    </div>
+
+    <h2>Add Product</h2>
+    <div id="add-product-form">
+        <label for="product-id">ID:</label>
+        <input type="text" id="product-id" name="product-id" required>
+
+        <label for="product-name">Name:</label>
+        <input type="text" id="product-name" name="product-name" required>
+
+        <label for="product-description">Description:</label>
+        <textarea id="product-description" name="product-description" required></textarea>
+
+        <label for="product-price">Price:</label>
+        <input type="number" id="product-price" name="product-price" required>
+
+        <label for="product-discount">Discount:</label>
+        <input type="number" id="product-discount" name="product-discount" required>
+
+        <label for="product-Type">Type:</label>
+        <input type="text" id="product-Type" name="product-Type" required>
+
+        <label for="product-img">Image URL:</label>
+        <input type="text" id="product-img" name="product-img" required>
+
+        <button type="button" id="add-product-button">Add Product</button>
+    </div>
+
+    <script>
+        
+        const form = document.getElementById('add-product-form');
+        getproducts();  // Call the function to get products
+
+        // Add event listener for form submission
+        document.getElementById('add-product-button').addEventListener('click', function() {
+            // Get the input values
+            const productId = document.getElementById('product-id').value;
+            const productName = document.getElementById('product-name').value;
+            const productDescription = document.getElementById('product-description').value;
+            const productPrice = document.getElementById('product-price').value;
+            const productDiscount = document.getElementById('product-discount').value;
+            const productType = document.getElementById('product-Type').value;
+            const productImg = document.getElementById('product-img').value;
+
+            addProduct(productId, productName, productDescription, productPrice, productDiscount,productType , productImg);
+        });
+
+
+        async function addProduct(productId, productName, productDescription, productPrice, productDiscount,productType ,productImg) {
+            try{
+                const response = await fetch(`http://localhost:8080/eatzone/AddProduct`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({id: productId, name: productName, description: productDescription, price: productPrice, discount: productDiscount, img: productImg, type: productType}),
+                });
+                const data = await response.json();
+                console.log(data);
+                location.reload();
+            }
+            catch(error){
+                console.error('Error:', error);
+                throw error;
+            }
+        }
+
+        async function getproducts(){
+            try{
+                const response = await fetch(`http://localhost:8080/eatzone/AddProduct`);
+                const data = await response.json();
+                console.log(data);
+
+                var productlist = document.getElementById("product-list");
+                productlist.innerHTML="";
+                var t="";
+                for(var i=0; i<data.length; i++){
+                    if (i%3==0){
+                        productlist.innerHTML+=`<div class="product-row">`+t+`</div>`;
+                        t="";
+                    }
+
+                    // Populate the product card with details
+                    t+= `<div class="product-card">
+                        <h3>${data[i].name}</h3>
+                        <p>ID: ${data[i].id}</p>
+                        <p>Description: ${data[i].description}</p>
+                        <p>Price: ₹${data[i].price}</p>
+                        <p>Discount: ${data[i].discount}%</p>
+                        <img src="${data[i].image}" alt="${data[i].name}"></div>`;
+                }
+                productlist.innerHTML+=`<div class="product-row">`+t+`</div>`
+
+            }
+            catch(error){
+                console.error('Error:', error);
+                throw error;
+            }
+        }
+
+        function showEditModal(product) {
+           
+            document.getElementById('edit-product-price').value = product.price;
+            document.getElementById('edit-product-discount').value = product.discount;
+        
+
+            // Show the modal
+            document.getElementById('edit-product-modal').style.display = 'block';
+        }
+
+        // Function to hide the edit product modal
+        function hideEditModal() {
+            // Hide the modal
+            document.getElementById('edit-product-modal').style.display = 'none';
+        }
+
+        // Event listener for product card click
+        document.getElementById('product-list').addEventListener('click', function(event) {
+            // Check if the clicked element is a product card
+            if (event.target.classList.contains('product-card')) {
+                // Get the product data associated with the clicked card
+                const productData = {
+                    
+                    name: event.target.querySelector('h3').innerText,
+                    description: event.target.querySelector('p:nth-child(3)').innerText,
+                    price: event.target.querySelector('p:nth-child(4)').innerText,
+                    discount: event.target.querySelector('p:nth-child(5)').innerText,
+                    image: event.target.querySelector('img').src,
+                };
+
+                // Show the edit product modal with the product data
+                localStorage.setItem("id",event.target.querySelector('p:nth-child(2)').innerText.split(' ')[1]);
+                showEditModal(productData);
+            }
+        });
+
+        // Event listener for cancel button in the edit product modal
+        document.getElementById('cancel-edit-button').addEventListener('click', function() {
+            // Hide the edit product modal
+            hideEditModal();
+        });
+
+        // Event listener for save button in the edit product modal
+        document.getElementById('save-edit-button').addEventListener('click', function() {
+            console.log('Save changes button clicked');
+            const editedProductData = {
+                id: localStorage.getItem("id"),
+                price: document.getElementById('edit-product-price').value,
+                discount: document.getElementById('edit-product-discount').value,
+            };
+            
+
+            editItems(editedProductData);
+            hideEditModal();
+        });
+
+        async function editItems(editedProductData){
+            try{
+                const response= await fetch(`http://localhost:8080/eatzone/EditProduct`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(editedProductData),
+                });
+
+            }
+            catch(error){
+                console.error('Error:', error);
+                throw error;
+            }
+            getproducts();
+            
+
+        
+        }
+    </script>
+</body>
+</html>

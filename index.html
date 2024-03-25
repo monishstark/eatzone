@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+        }
+
+        .side-popup {
+            display: none;
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: -2px 0px 5px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .side-popup.open {
+            display: block;
+            transform: translateX(0);
+        }
+
+        .side-popup .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        }
+
+        .side-popup .close:hover {
+            color: #555;
+        }
+
+        .side-popup div div {
+            margin-bottom: 10px;
+        }
+
+        .side-popup div label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .side-popup div input[type="text"],
+        .side-popup div input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .side-popup div button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .side-popup div button:hover {
+            background-color: #45a049;
+        }
+        .lrcontainer{
+            display: flex;
+            height: 100%;
+            
+        }
+        .lcontainer{
+            flex: 1;
+           
+            height: 100vh;
+            width: 50%;
+
+           
+        }
+        .rcontainer{
+            flex: 1;
+            
+            width: 50%;
+            
+        }
+        .limg{
+            
+            height: 100vh;
+            object-fit: cover;
+        }
+        .logoimg{
+            height: 50px;
+            width: 50px;
+            margin: 10px;
+            margin-right: 200px;
+        }
+        .btncontainer{
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .logBtn{
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .ptitle{
+            margin-top: 100px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    
+        <div class="lrcontainer">
+            <div class="lcontainer">
+                <div class="btncontainer">
+                    <img src="dish.png" class="logoimg">
+                    <div class="logBtn" id="loginBtn">Login</div>
+                    <div class="logBtn" id="signnBtn">SignUp</div>
+                </div>
+                <div class="extra">
+                    <img src="" alt="">
+
+                </div>
+
+
+            </div>
+
+            <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_1340/Lunch1_vlksgq" alt="" class="limg">
+                
+
+            </div>
+
+            
+
+        
+
+
+        </div>
+    
+    
+
+    <div id="emailPopup" class="side-popup">
+        <span class="close">&times;</span>
+        <div id="emailForm">
+            <h2 class="ptitle">Login</h2>
+            <div>
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email">
+            </div>
+            <button type="button" id="continueBtn">Continue</button>
+        </div>
+    </div>
+
+    <div id="otpPopup" class="side-popup">
+        <span class="close">&times;</span>
+        <div id="otpForm">
+            <h2 class="ptitle">Enter OTP</h2>
+            <div>
+                <label for="otp">OTP:</label>
+                <input type="password" id="otp" name="otp">
+            </div>
+            <button type="submit" onclick="verifyotp()">Submit</button>
+        </div>
+    </div>
+
+    <div id="signPopup" class="side-popup">
+        <span class="close">&times;</span>
+        <div id="signForm">
+            <h2 class="ptitle">SignUp</h2>
+            <div>
+                <label for="email">Email:</label>
+                <input type="text" id="semail" name="email">
+                <label for="name">Name:</label>
+                <input type="text" id="sname" name="name">
+                <label for="phone">Phone:</label>
+                <input type="text" id="sphone" name="phone">
+            </div>
+            <button type="button" id="scontinueBtn">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            document.getElementById('emailPopup').classList.add('open');
+        });
+
+        document.getElementById('continueBtn').addEventListener('click', function() {
+            sendotp();
+            document.getElementById('emailPopup').classList.remove('open');
+            document.getElementById('otpPopup').classList.add('open');
+        });
+
+        document.getElementById('signnBtn').addEventListener('click', function() {
+            
+            document.getElementById('signPopup').classList.add('open');
+        });
+
+        document.getElementById('scontinueBtn').addEventListener('click', function() {
+            signup();
+            document.getElementById('signPopup').classList.remove('open');
+            document.getElementById('emailPopup').classList.add('open');
+        });
+        
+
+
+        var closeBtns = document.getElementsByClassName('close');
+        for (var i = 0; i < closeBtns.length; i++) {
+            closeBtns[i].addEventListener('click', function() {
+                this.parentElement.classList.remove('open');
+            });
+        }
+
+
+
+        async function signup(){
+            var email = document.getElementById('semail').value;
+            var name = document.getElementById('sname').value;
+            var phone = document.getElementById('sphone').value;
+            
+            var data = {
+                "email": email,
+                "name": name,
+                "phone": phone
+            }
+            try{
+                var res = await fetch('http://localhost:8080/eatzone/SignUp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+
+                });
+                ;
+                console.log(res.statuso);
+            }catch(err){
+                console.log(err);
+            }
+
+        }
+
+        async function sendotp(){
+            var email = document.getElementById('email').value;
+            localStorage.setItem('email', email);
+            var data = {
+                "email": email
+            }
+            try{
+                var res = await fetch('http://localhost:8080/eatzone/Login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+
+                });
+                var resData = await res.json();
+                console.log(resData);
+            }catch(err){
+                console.log(err);
+            }
+        }
+
+        async function verifyotp(){
+            var otp = document.getElementById('otp').value;
+            var email = localStorage.getItem('email');
+            var data = {
+                "email": email,
+                "otp": otp
+            }
+            try{
+                var res = await fetch('http://localhost:8080/eatzone/OtpVerify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+
+                });
+                
+                console.log(res.status);
+                if (res.status == 200){
+                    window.location.href = "http://localhost:8080/eatzone/home.html";
+                }
+                else{
+                    alert("Wrong OTP");}
+            }catch(err){
+                console.log(err);
+            }
+        }
+    </script>
+</body>
+</html>

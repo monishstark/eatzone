@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="header.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 30px 0;
+            color: #3498db;
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        section {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #3498db;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .product-details {
+            /* Style for product details on the left */
+            flex-grow: 1;
+        }
+
+        
+
+        .counter {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .counter button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .address-form {
+            display: grid;
+            grid-gap: 15px;
+        }
+
+        label {
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+
+        input {
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        
+
+        .xounterimg{
+            width: 20px;
+            height: 20px;
+            margin-left: 5px;
+            margin-right: 5px;
+            border-radius: 10px;
+        }
+        .counterimg{
+            width: 20px;
+            height: 20px;
+            margin-left: 5px;
+            margin-right: 5px;
+            border-radius: 10px;
+        }
+
+        .xounterimg:hover {
+            box-shadow: 0 2px 8px #8ac07a;
+        }
+
+        .counterimg:hover {
+            box-shadow: 0 2px 8px #d65151;
+        }
+        .address-dropdown {
+            display: none;
+        }
+
+        .toggle-dropdown {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .contcont{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .continue{
+            background-color: #3498db ;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+
+        }
+        .continue:hover{
+            background-color: #2980b9;
+            box-shadow: #3498db 0px 0px 10px;
+        }
+
+        .existing-address{
+            border: #a5a1a1 1px solid;
+            background-color: #e9e1e1;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            
+        }
+        .current-address{
+            border: #a5a1a1 1px solid;
+            background-color: #e9e1e1;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="leftpart">
+        <div><img src="food-delivery.gif" class="logoimg" onclick="home()"></div>
+    </div>
+    <div class="rightpart">
+        <form action="" class="searchBar" id="cityForm" >
+            <input type="text" id ="sInput"placeholder="Search for products" autocomplete="off">
+            <button id ="btn"type="submit" ><img src="search-interface-symbol.png" class="btnimg"></button>
+        </form>
+        <div class="pcont" id="pct" >
+            <img src="user.png" class="pimg">
+            <div style="margin-top: 8px;">Profile</div>
+        </div>
+        <div class="ccont" onclick="callcart()">
+            <div class="cart-icon">
+                <img src="shopping-bag (2).png" class="cartimg">
+                <span class="cart-count" id="ccount">0</span>
+            </div>
+            <div>Cart</div>
+        </div>
+    </div>
+
+</div>
+    <h1>Order Page</h1>
+
+    <section id="cart">
+        <h2>Cart</h2>
+        <div id="products">
+        
+    </div>
+    </section>
+
+
+    <section id="address">
+        <h2>Address</h2>
+        
+            
+
+     
+            <div class="existing-address" style="cursor: pointer;">
+    
+                <p  >No existing Location</p>
+            </div>
+
+            <div class="current-address" onclick="fetchCurrentAddress()" style="cursor: pointer;">
+                <img src="map (1).png" alt="" class="pinmap" style="width: 20px; height: 20px; margin: 5px;">
+    
+                <span style="margin: 5px; " >Choose Current address</span>
+            </div>
+
+            
+
+    
+            <div class="address-dropdown">
+                <label for="new-address">Enter New Address:</label>
+                <input type="text" id="new-address" name="new-address" placeholder="Enter your new address">
+                <div class="contcont">
+                <span class="continue" onclick="addnewaddress()">Continue</span>
+            </div>
+            </div>
+
+   
+            <button type="button" class="toggle-dropdown" onclick="toggleAddressDropdown()" >Use Another Address</button>
+            <button onclick="createOrderID()">rwerwer</button>
+
+            
+            
+        
+
+    <script>
+        fetchCount();
+        viewcart();
+        fetchAddress();
+
+
+
+        async function createOrderID(){
+            var data={
+                "total": localStorage.getItem("total")
+            }
+            try{
+                var res = await fetch('http://localhost:8080/eatzone/payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+
+                    },
+                    body: JSON.stringify(data)
+
+                });
+                const dat = await res.json();
+                var orderid=dat[0].orderid;
+                window.location.href = `payment.html?orderid=${orderid}&total=${localStorage.getItem("total")}`;
+            }catch(err){
+                console.log(err);
+            }
+        }
+
+        async function addnewaddress(){
+            var address = document.getElementById("new-address").value;
+            var data={
+                "address": address
+            }
+            try{
+                var res = await fetch('http://localhost:8080/eatzone/Address', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log(res.status);
+            }catch(err){
+                console.log(err);
+            }
+            fetchAddress();
+        }
+
+        function fetchCurrentAddress(){
+            if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
+                            console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+                            func2(latitude,longitude);
+                            
+                        },
+                        (error) => {
+                            console.error(`Geolocation error: ${error.message}`);
+                        }
+                    );
+                } else {
+                    console.error("Geolocation is not supported by this browser.");
+                }
+        }
+
+        async function func2(l,t){
+                const url = `http://api.positionstack.com/v1/reverse?access_key=5b4b67f1c5e24f925f6282369f9c124c&query=${l},${t}& limit=1`;
+
+                try {
+                    const response = await fetch(url);
+                    const result = await response.json();
+                    console.log(result.data[0].name,result.data[0].street,result.data[0].county);
+                    var existing = document.querySelector('.current-address');
+                existing.innerHTML=`<p>${result.data[0].name+" "+result.data[0].street+" "+result.data[0].county}</p>`;
+
+                } catch (error) {
+                    console.error(error);
+                }
+
+            }
+
+    async function fetchAddress(){
+        try{
+            const response = await fetch(`http://localhost:8080/eatzone/Address`);
+            const data = await response.json();
+            if (data[0].address==null || data[0].address==""){
+                return
+            }
+            else{
+                var existing = document.querySelector('.existing-address');
+                existing.innerHTML=`<p>${data[0].address}</p>`;
+            }
+            
+            
+        }
+        catch(error){
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+
+async function fetchCount(){
+    try{
+        const response = await fetch(`http://localhost:8080/eatzone/CartCount`);
+        const data = await response.json();
+        var count = document.getElementById("ccount");
+        count.innerHTML = data[0].cartsize;
+
+
+    }
+    catch(error){
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+        function toggleAddressDropdown() {
+            var dropdown = document.querySelector('.address-dropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+        var counter = 0;
+
+        async function increaseCounter(q,id) {
+            q++;
+            var data={
+                "id": id,
+                "quantity": q
+            }
+            try{
+                var res = await fetch('http://localhost:8080/eatzone/AddCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log(res.status);
+            }catch(err){
+                console.log(err);
+            }
+            viewcart();
+
+            
+        }
+
+        async function decreaseCounter(q,id) {
+            q--;
+            var data={
+                "id": id,
+                "quantity": q
+            }
+            try{
+                var res = await fetch('http://localhost:8080/eatzone/AddCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log(res.status);
+            }catch(err){
+                console.log(err);
+            }
+            viewcart();
+            
+            
+        }
+
+        async function viewcart(){
+            try{
+
+                const response = await fetch(`http://localhost:8080/eatzone/ViewCart`);
+                const data = await response.json();
+                data.sort(function (a, b) {
+                        return a.name.localeCompare(b.name);
+                    });
+                var products = document.getElementById("products");
+                if (data.length==0){
+                    products.innerHTML=`<div class="product">
+                                            <div class="product-details">
+                                                <span>No items in cart</span>
+                                        
+                                            </div>
+                                            
+
+                                        </div>`;
+                    document.getElementById("address").style.display="none";
+                    return
+                }
+                let i=0
+                var t="";
+                var sum1=0;
+                while (i<data.length){
+                    console.log(data[i].id);
+                    sum1+=price(data[i].price,data[i].discount)*data[i].quantity;
+                    t+=`<div class="product">
+                                            <div class="product-details">
+                                                <span>${data[i].name}</span>
+                                        
+                                            </div>
+                                            
+                                            <div class="counter">
+                                                <img src="minus.png" onclick="decreaseCounter('${data[i].quantity}', '${data[i].id}')" class="counterimg">
+                                                <span id="counter">${data[i].quantity}</span>
+                                                <img src="plus.png" onclick="increaseCounter('${data[i].quantity}', '${data[i].id}')" class="xounterimg">
+                                            </div>
+                                            <span style="width:47px;margin-left:5px">₹${price(data[i].price,data[i].discount)*data[i].quantity}</span>
+                                        </div>`;
+                    i++;
+
+
+                }
+                t+=`<div class="product" style="border-top: #7c7777 1px solid">
+                <div class="product-details">
+                    <span>Total</span>
+            
+                </div>
+                <div class="counter">
+                    ₹${sum1}
+
+                </div>
+
+            </div>`;
+            localStorage.setItem("total",sum1);
+                products.innerHTML=t;
+                fetchCount();
+           
+
+
+
+            }
+            catch(error){
+                console.error('Error:', error);
+                throw error;
+            }
+        }
+
+        function price(p, d) {
+            return Math.round(p - (p * d / 100));
+        }
+
+        function home(){
+            window.location.href = "home.html";
+        }
+    </script>
+</body>
+</html>

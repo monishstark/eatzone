@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="header.css">
+        <meta charset="UTF-8">
+
+    </head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Assistant, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px;
+
+        }
+
+        .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 20px;
+        
+    }
+
+    .cards {
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        width: 450px;
+        margin: 20px auto; /* Center the cards horizontally */
+        min-height: 580px;
+    }
+
+    /* Add some hover effects */
+    .cards:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .details {
+        padding: 20px;
+    }
+
+    .ctitle {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .cdes {
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    .cimg {
+        width: 100%;
+        height: 200px; 
+        object-fit: cover;
+        border-bottom: 1px solid #eee;
+    }
+
+    .price {
+        display: flex;
+        align-items: center;
+        margin-top: 15px;
+    }
+
+    .cp, .p, .d {
+        font-size: 1rem;
+        margin-right: 10px;
+    }
+
+    .cp {
+        font-weight: bold;
+        color: #27ae60;
+    }
+
+    .p {
+        text-decoration: line-through;
+        color: #777;
+    }
+
+    .d {
+        color: #e74c3c;
+    }
+
+    
+    </style>
+    <body>
+        <div class="header">
+            <div class="leftpart">
+            <div><img src="food-delivery.gif" class="logoimg"></div>
+        </div>
+        <div class="rightpart">
+            <form action="" class="searchBar" id="cityForm" >
+                <input type="text" id ="sInput"placeholder="Search for products" autocomplete="off">
+                <button id ="btn"type="submit" ><img src="search-interface-symbol.png" class="btnimg"></button>
+            </form>
+            <div class="pcont" id="pct" >
+                <img src="user.png" class="pimg">
+                <div style="margin-top: 8px;">Profile</div>
+            </div>
+            <div class="ccont" onclick="callcart()">
+                <div class="cart-icon">
+                    <img src="shopping-bag (2).png" class="cartimg">
+                    <span class="cart-count" id="ccount">0</span>
+                </div>
+                <div>Cart</div>
+            </div>
+        </div>
+    
+    </div>
+    <div id="suggest" class="autocomplete-suggestions"></div>
+    <div id="pdrop"  class="profiledrop" ></div>
+        
+        
+<div style="margin-top: 10px;">
+            <span>Sort:
+                <select id="sortDropdown" onchange="sortProducts()">
+                    <option value="pricelh">Price low to high</option>
+                    <option value="pricehl">Price high to low</option>
+                    <option value="alphabetical">Alphabetical</option>
+                </select>
+            </span>
+            <span>Filter by Price:
+                <select id="priceRangeDropdown" onchange="filterByPrice()">
+                    <option value="all">All</option>
+                    <option value="0-1000">0 - 1000</option>
+                    <option value="1001-2000">1001 - 2000</option>
+                    <option value="2001-3000">2001 - 3000</option>
+                </select>
+            </span>
+        </div>
+        <div class="products" id="pd"></div>
+        <script>
+            fetchCount();
+
+async function fetchCount(){
+    try{
+        const response = await fetch(`http://localhost:8080/eatzone/CartCount`);
+        const data = await response.json();
+        var count = document.getElementById("ccount");
+        count.innerHTML = data[0].cartsize;
+
+
+    }
+    catch(error){
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+             
+        const searchBar = document.getElementById("sInput");
+        searchBar.addEventListener("input", function () {
+            fetchsuggestions(searchBar.value);
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = urlParams.get('search');
+            localStorage.setItem("search", data);
+            console.log('Data received:', data);
+            fetchproducts(data, 0, 0, 100000000);
+        });
+
+        function sortProducts() {
+            const sortDropdown = document.getElementById("sortDropdown");
+            const selectedOption = sortDropdown.value;
+            const data = localStorage.getItem("search");
+            console.log(selectedOption);
+            console.log("sort " + data);
+            if (selectedOption == "pricelh") {
+                fetchproducts(data, 0, 0, 100000000);
+            } else if (selectedOption == "pricehl") {
+                fetchproducts(data, 1, 0, 100000000);
+            } else if (selectedOption == "alphabetical") {
+                fetchproducts(data, 2, 0, 100000000);
+            }
+        }
+
+        function filterByPrice() {
+            const priceRangeDropdown = document.getElementById("priceRangeDropdown");
+            const selectedOption = priceRangeDropdown.value;
+            const data = localStorage.getItem("search");
+            if (selectedOption == "all") {
+                fetchproducts(data, 0, 0, 100000000);
+            } else if (selectedOption == "0-1000") {
+                fetchproducts(data, 0, 0, 1000);
+            } else if (selectedOption == "1001-2000") {
+                fetchproducts(data, 0, 1001, 2000);
+            } else if (selectedOption == "2001-3000") {
+                fetchproducts(data, 0, 2001, 3000);
+            }
+        }
+
+        async function fetchproducts(data, s, l, u) {
+            console.log(data);
+            try {
+                const response = await fetch('http://localhost:8080/eatzone/FetchRest?search=' + data);
+                const arr = await response.json();
+
+                if (s == 0) {
+                    arr.sort(function (a, b) {
+                        return price(a.price, a.discount) - price(b.price, b.discount);
+                    });
+                } else if (s == 1) {
+                    arr.sort(function (a, b) {
+                        return price(b.price, b.discount) - price(a.price, a.discount);
+                    });
+                } else if (s == 2) {
+                    arr.sort(function (a, b) {
+                        return a.pname.localeCompare(b.pname);
+                    });
+                }
+                console.log(arr);
+
+                var pd = document.getElementById("pd");
+                pd.innerHTML = ""; 
+                var t = "";
+                for (var i = 0; i < arr.length; i++) {
+                    if (i % 2 == 0) {
+                        pd.innerHTML += `<div class="row">${t}</div>`;
+                        t = "";
+                    }
+                    var tp = price(arr[i].price, arr[i].discount);
+                    if (tp >= l && tp <= u) {
+                        t += `<div class="cards" onclick="productsDetail('${arr[i].rid}', '${arr[i].rname}', '${arr[i].address}', '${arr[i].rating}')">
+                            <div class="details">
+                                        <div class="ctitle">${arr[i].rname}</div>
+                                        <div class="cdes">${arr[i].address}</div>
+                                        <span style="margin-left:10px"> ★${arr[i].rating}</span>
+                                    </div>
+                                    <img src="${arr[i].img}" class="cimg">
+                                    <div class="details">
+                                        <div class="ctitle">${arr[i].pname}</div>
+                                        <div class="cdes">${arr[i].description}</div>
+                                        <div class="price">
+                                            <div class="cp">₹${price(arr[i].price, arr[i].discount)}</div>
+                                            <div class="p">₹${arr[i].price}</div>
+                                            <div class="d">${arr[i].discount}% OFF</div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                    }
+                }
+
+                pd.innerHTML += `<div class="row">${t}</div>`;
+            } catch (err) {
+                console.log("at fetchProducts " + err);
+            }
+        }
+
+       
+
+
+        function price(p, d) {
+            return Math.round(p - (p * d / 100));
+        }
+
+        function productsDetail(id,name,address,rating) {
+            console.log(id+" "+name+" "+address+" "+rating);
+        
+            
+            window.location.href = `resturant.html?id=${id}&name=${name}&address=${address}&rating=${rating}`;
+        
+
+        }
+
+        async function fetchsuggestions(s){
+                try {
+                    if (s == "") {
+                        document.getElementById("suggest").innerHTML = "";
+                        return;
+                    }
+                    const response = await fetch(`http://localhost:8080/eatzone/Autofill?word=${s}`);
+                    const data = await response.json();
+                    console.log(data);
+                    var suggest = document.getElementById("suggest");
+                    var t="";
+                    for(var i=0;i<data.length;i++){
+                        t+=`<div class="sug" onclick="search('${data[i]}')">${data[i]}</div>`;
+                    }
+                    suggest.innerHTML=t;
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    throw error;
+                }
+            }
+
+            function search(s){
+                window.location.href = "products.html?search="+s;
+            }
+
+            function callcart(){
+                window.location.href = "cart.html";
+            }
+
+            function callprofile(){
+                window.location.href = "profile.html";
+            }
+            function callhome(){
+                window.location.href="home.html";
+            }
+        </script>
+    </body>
+</html>

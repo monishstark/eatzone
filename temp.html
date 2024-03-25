@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer Box</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #282c36;
+            color: #fff;
+        }
+
+        .timer-container {
+            text-align: center;
+        }
+
+        .timer-box {
+            width: 150px;
+            height: 150px;
+            line-height: 150px;
+            background-color: #61dafb;
+            border-radius: 50%;
+            font-size: 36px;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleUp 0.5s ease-out;
+        }
+
+        @keyframes scaleUp {
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes countdownAnimation {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+
+            50% {
+                transform: scale(1.2);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .countdown {
+            animation: countdownAnimation 1s infinite;
+        }
+
+        .times-up {
+            color: #e74c3c;
+            font-size: 24px;
+            font-weight: bold;
+            animation: timesUpAnimation 0.5s ease-in-out;
+        }
+
+        @keyframes timesUpAnimation {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            var timer = 20 * 60; // 20 minutes in seconds
+            var timerBox = document.getElementById('timer-box');
+
+            var countdown = setInterval(function () {
+                var minutes = Math.floor(timer / 60);
+                var seconds = timer % 60;
+
+                timerBox.innerText = formatTime(minutes) + ':' + formatTime(seconds);
+                timer--;
+
+                if (timer < 0) {
+                    clearInterval(countdown);
+                    timerBox.innerText = 'Time\'s up!';
+                    timerBox.classList.add('times-up');
+                }
+            }, 1000);
+
+            function formatTime(time) {
+                return time < 10 ? '0' + time : time;
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div class="timer-container">
+        <div id="timer-box" class="timer-box countdown">20:00</div>
+    </div>
+</body>
+
+</html>
+ 
